@@ -1,0 +1,24 @@
+{
+  "name": "milkyway-server",
+  "version": "1.0.0",
+  "description": "Server for the ITP Project Milkyway.",
+  "type": "module",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Raphael Losko",
+  "license": "ISC",
+  "dependencies": {
+    "colors": "^1.4.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "express-async-handler": "^1.2.0",
+    "helmet": "^6.0.1",
+    "morgan": "^1.10.0",
+    "path": "^0.12.7",
+    "pg": "^8.8.0"
+  }
+}
