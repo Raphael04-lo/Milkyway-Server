@@ -11,7 +11,7 @@ const dbGetPlanet = async (id) => {
 };
 
 const dbGetArticles = async () => {
-  const { rows } = await query('SELECT * from articles');
+  const { rows } = await query('SELECT * from article');
   return rows;
 };
 
