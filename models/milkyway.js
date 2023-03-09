@@ -10,4 +10,9 @@ const dbGetPlanet = async (id) => {
   return rows[0];
 };
 
-export { dbGetPlanets, dbGetPlanet };
+const dbGetArticles = async () => {
+  const { rows } = await query('SELECT * from articles');
+  return rows;
+};
+
+export { dbGetPlanets, dbGetPlanet, dbGetArticles };
