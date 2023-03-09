@@ -482,6 +482,27 @@ GRANT ALL ON SCHEMA public TO m_admin;
 
 
 --
+-- Name: TABLE images; Type: ACL; Schema: public; Owner: postgres
+--
+
+GRANT SELECT ON TABLE public.images TO milk_admin;
+
+
+--
+-- Name: TABLE imgmerch; Type: ACL; Schema: public; Owner: postgres
+--
+
+GRANT SELECT ON TABLE public.imgmerch TO milk_admin;
+
+
+--
+-- Name: TABLE merchendise; Type: ACL; Schema: public; Owner: m_admin
+--
+
+GRANT SELECT ON TABLE public.merchendise TO milk_admin;
+
+
+--
 -- PostgreSQL database dump complete
 --
 
