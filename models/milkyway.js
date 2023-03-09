@@ -15,4 +15,15 @@ const dbGetArticles = async () => {
   return rows;
 };
 
-export { dbGetPlanets, dbGetPlanet, dbGetArticles };
+const dbGetMerch = async () => {
+  const { rows } = await query(`
+  SELECT i2.im_id, m.name, m.description, i2.color, i2.img
+  FROM merchendise m
+         JOIN imgmerch i on m.m_id = i.m_id
+         JOIN images i2 on i.im_id = i2.im_id
+  ORDER BY m.name;
+`);
+  return rows;
+};
+
+export { dbGetPlanets, dbGetPlanet, dbGetArticles, dbGetMerch };
