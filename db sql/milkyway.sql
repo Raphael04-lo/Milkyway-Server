@@ -20,22 +20,10 @@ SET default_tablespace = '';
 
 SET default_table_access_method = heap;
 
---
--- Roles
---
-
-
 CREATE ROLE m_admin;
 ALTER ROLE m_admin WITH NOSUPERUSER INHERIT NOCREATEROLE NOCREATEDB NOLOGIN NOREPLICATION NOBYPASSRLS;
 CREATE ROLE milk_admin;
 ALTER ROLE milk_admin WITH NOSUPERUSER INHERIT NOCREATEROLE NOCREATEDB LOGIN NOREPLICATION NOBYPASSRLS PASSWORD 'SCRAM-SHA-256$4096:N7kcvpvTFgeyj8nZggfOfg==$iPT5yOZxuZxql5m1OSnyvspLAdaVH3X0nVUGPYBO/EA=:pFma4/4SM27Uy88KXOczF54k477bB9vdTudLP+twFoE=';
-
-
---
--- Role memberships
---
-
-GRANT m_admin TO milk_admin GRANTED BY postgres;
 
 --
 -- Name: article; Type: TABLE; Schema: public; Owner: m_admin
@@ -87,6 +75,53 @@ CREATE TABLE public.has (
 ALTER TABLE public.has OWNER TO m_admin;
 
 --
+-- Name: images; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.images (
+    im_id integer NOT NULL,
+    img character varying(50),
+    color character varying(20)
+);
+
+
+ALTER TABLE public.images OWNER TO postgres;
+
+--
+-- Name: images_im_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.images_im_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.images_im_id_seq OWNER TO postgres;
+
+--
+-- Name: images_im_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.images_im_id_seq OWNED BY public.images.im_id;
+
+
+--
+-- Name: imgmerch; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.imgmerch (
+    im_id integer NOT NULL,
+    m_id integer NOT NULL
+);
+
+
+ALTER TABLE public.imgmerch OWNER TO postgres;
+
+--
 -- Name: merchendise; Type: TABLE; Schema: public; Owner: m_admin
 --
 
@@ -94,8 +129,7 @@ CREATE TABLE public.merchendise (
     m_id integer NOT NULL,
     name character varying(40) NOT NULL,
     price numeric(6,2) NOT NULL,
-    description text NOT NULL,
-    img character varying(50)
+    description text NOT NULL
 );
 
 
@@ -214,6 +248,13 @@ ALTER TABLE ONLY public.article ALTER COLUMN a_id SET DEFAULT nextval('public.ar
 
 
 --
+-- Name: images im_id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.images ALTER COLUMN im_id SET DEFAULT nextval('public.images_im_id_seq'::regclass);
+
+
+--
 -- Name: merchendise m_id; Type: DEFAULT; Schema: public; Owner: m_admin
 --
 
@@ -254,10 +295,53 @@ COPY public.has (p_id, r_id) FROM stdin;
 
 
 --
+-- Data for Name: images; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.images (im_id, img, color) FROM stdin;
+1	/cups/blue.png	blue
+2	/cups/gray.png	gray
+3	/cups/orange.png	gray
+4	/hoodies/blue_front.png	blue
+5	/hoodies/blue.png	blue
+6	/hoodies/gray_front.png	gray
+7	/hoodies/gray.png	gray
+8	/hoodies/orange_front.png	orange
+9	/hoodies/orange.png	orange
+10	/tshirts/blue.png	blue
+11	/tshirts/gray.png	gray
+12	/tshirts/orange.png	orange
+\.
+
+
+--
+-- Data for Name: imgmerch; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.imgmerch (im_id, m_id) FROM stdin;
+1	1
+2	1
+3	1
+4	2
+5	2
+6	2
+7	2
+8	2
+9	2
+10	3
+11	3
+12	3
+\.
+
+
+--
 -- Data for Name: merchendise; Type: TABLE DATA; Schema: public; Owner: m_admin
 --
 
-COPY public.merchendise (m_id, name, price, description, img) FROM stdin;
+COPY public.merchendise (m_id, name, price, description) FROM stdin;
+1	Cup	12.99	A great cup for not a cheap price.
+3	T-Shirt	9.99	Get your own Milkyway T-Shirt
+2	Hoodie	27.99	If you ever feel cold in space, you can pruchase our new and not improved Hoodies
 \.
 
 
@@ -288,10 +372,17 @@ SELECT pg_catalog.setval('public.article_a_id_seq', 3, true);
 
 
 --
+-- Name: images_im_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.images_im_id_seq', 12, true);
+
+
+--
 -- Name: merchendise_m_id_seq; Type: SEQUENCE SET; Schema: public; Owner: m_admin
 --
 
-SELECT pg_catalog.setval('public.merchendise_m_id_seq', 1, false);
+SELECT pg_catalog.setval('public.merchendise_m_id_seq', 3, true);
 
 
 --
@@ -325,6 +416,14 @@ ALTER TABLE ONLY public.has
 
 
 --
+-- Name: images images_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.images
+    ADD CONSTRAINT images_pkey PRIMARY KEY (im_id);
+
+
+--
 -- Name: merchendise merchendise_pkey; Type: CONSTRAINT; Schema: public; Owner: m_admin
 --
 
@@ -346,6 +445,22 @@ ALTER TABLE ONLY public.planet
 
 ALTER TABLE ONLY public.routes
     ADD CONSTRAINT routes_pkey PRIMARY KEY (r_id);
+
+
+--
+-- Name: imgmerch fk_im_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.imgmerch
+    ADD CONSTRAINT fk_im_id FOREIGN KEY (im_id) REFERENCES public.images(im_id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: imgmerch fk_m_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.imgmerch
+    ADD CONSTRAINT fk_m_id FOREIGN KEY (m_id) REFERENCES public.merchendise(m_id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
