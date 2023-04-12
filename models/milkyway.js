@@ -1,22 +1,34 @@
-import { query, pool } from '../db/index.js';
+// import { query, pool } from '../db/index.js';
+import pg from 'pg';
+
+var client = new pg.Client({
+  user: 'admin',
+  password: 'IVBvaCzsx8O4ZA1qmzlFS5lYDoljYCeh',
+  database: 'milkyway_i3k7',
+  port: 5432,
+  host: 'dpg-cgqikau4dad5es12ji50-a.frankfurt-postgres.render.com',
+  ssl: true,
+});
+
+client.connect();
 
 const dbGetPlanets = async () => {
-  const { rows } = await query(`SELECT * FROM planet`);
+  const { rows } = await client.query(`SELECT * FROM planet`);
   return rows;
 };
 
 const dbGetPlanet = async (id) => {
-  const { rows } = await query(`SELECT * FROM planet WHERE p_id =$1`, [id]);
+  const { rows } = await client.query(`SELECT * FROM planet WHERE p_id =$1`, [id]);
   return rows[0];
 };
 
 const dbGetArticles = async () => {
-  const { rows } = await query('SELECT * from article');
+  const { rows } = await client.query('SELECT * from article');
   return rows;
 };
 
 const dbGetMerch = async () => {
-  const { rows } = await query(`
+  const { rows } = await client.query(`
   SELECT i2.im_id, m.name, m.description, i2.color, i2.img
   FROM merchendise m
          JOIN imgmerch i on m.m_id = i.m_id
