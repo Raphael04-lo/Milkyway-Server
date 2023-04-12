@@ -1,10 +1,10 @@
 import express from 'express';
 import morgan from 'morgan';
-import helmet from 'helmet';
+// import helmet from 'helmet';
 import dotenv from 'dotenv';
 import path from 'path';
 import cors from 'cors';
-import contentSecurityPolicy from 'helmet-csp';
+// import contentSecurityPolicy from 'helmet-csp';
 import routes from './routes/milkyway.js';
 import { errorHandler, notFoundHandler } from './middleware/errorHandler.js';
 
@@ -15,21 +15,21 @@ const dirname = path.resolve();
 const app = express();
 
 app.use(morgan('dev'));
-app.use(helmet());
+// app.use(helmet());
 app.use(cors());
 
-app.use(
-  contentSecurityPolicy({
-    useDefaults: true,
-    directives: {
-      defaultSrc: ["'self'", 'default.example'],
-      scriptSrc: ["'self'", 'js.example.com'],
-      objectSrc: ["'none'"],
-      upgradeInsecureRequests: [],
-    },
-    reportOnly: false,
-  }),
-);
+// app.use(
+//   contentSecurityPolicy({
+//     useDefaults: true,
+//     directives: {
+//       defaultSrc: ["'self'", 'default.example'],
+//       scriptSrc: ["'self'", 'js.example.com'],
+//       objectSrc: ["'none'"],
+//       upgradeInsecureRequests: [],
+//     },
+//     reportOnly: false,
+//   }),
+// );
 
 app.use(express.static(path.join(dirname, '/public')));
 
